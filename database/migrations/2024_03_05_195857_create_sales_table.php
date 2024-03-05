@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->double('amount',5,2);
+            $table->double('amount',5,2)->nullable()->default(0);
             $table->timestamps();
         });
     }
