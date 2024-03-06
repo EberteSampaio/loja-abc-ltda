@@ -10,4 +10,5 @@ class SaleProduct extends Model
     use HasFactory;
 
     protected $fillable = ['sale_id', 'product_id', 'amount'];
+    protected $hidden = ['created_at', 'updated_at'];
 }

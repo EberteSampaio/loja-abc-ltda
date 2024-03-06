@@ -15,25 +15,24 @@ class SalesSeeder extends Seeder
      */
     public function run(): void
     {
+        $saleAmount = 0;
+
+        $newSale = Sale::create(['amount' => 0]);
+
+        $products = Product::inRandomOrder()->get();
+
         for ($i = 0; $i < 2; $i++) {
-            $newSale = Sale::create(['amount' => 0]);
 
-            $products = Product::inRandomOrder()->get();
-            $saleAmount = $products[0]->price;
+            $saleAmount += $products[$i]->price;
 
-            SaleProduct::create([
-                'sale_id' => $newSale->id,
-                'product_id' => $products[0]->id,
-                'amount' => $products[0]->price
-            ]);
 
             SaleProduct::create([
                 'sale_id' => $newSale->id,
-                'product_id' => $products[1]->id,
-                'amount' => $products[1]->price
+                'product_id' => $products[$i]->id,
+                'amount' => $products[$i]->price
             ]);
 
-            $newSale->update(['amount' => (double)$saleAmount]);
+            $newSale->update(['amount' => $saleAmount]);
         }
     }
 }
