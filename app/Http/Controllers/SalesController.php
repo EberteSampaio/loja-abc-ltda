@@ -14,9 +14,19 @@ class SalesController extends Controller
        $this->salesService = new SalesService();
     }
 
+    public function create()
+    {
+        return $this->salesService->newSale();
+    }
+
     public function index()
     {
         return $this->salesService->salesMade();
+    }
+
+    public function update(Request $request)
+    {
+        return $this->salesService->insertProductsInSale($request);
     }
     public function show(Request $request)
     {

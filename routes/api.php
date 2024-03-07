@@ -20,8 +20,10 @@ use App\Http\Controllers\ProductController;
 Route::get('/all-product',[ProductController::class,'index']);
 
 Route::get('/sales/all-sales',[SalesController::class,'index']);
+Route::get('/sales/new-sales',[SalesController::class,'create']);
 Route::delete('/sales/delete-sales',[SalesController::class,'destroy']);
 Route::post('/sales/consult-sales',[SalesController::class,'show']);
+Route::post('/sales/insert-products',[SalesController::class,'update']);
 Route::post('/sales/delete-sales',[SalesController::class,'destroy']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

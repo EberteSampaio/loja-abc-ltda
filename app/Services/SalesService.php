@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,6 +21,21 @@ class SalesService
             return \response()->json($sales,Response::HTTP_OK);
         }catch (\Exception $e){
             return response()->json(['error'=>['message'=> $e->getMessage()]],Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function newSale()
+    {
+        try {
+
+            if(!($newSale = Sale::create(['amount' => 0]))){
+                throw new \Exception("It was not possible to register a new sale in the system.");
+            }
+
+            return response()->json(['success'=>['message'=>"Purchase registered successfully. Purchase ID: $newSale->id"]],Response::HTTP_OK);
+
+        }catch (\Exception $e){
+            return response()->json(['error' => ['error' => $e->getMessage()]]);
         }
     }
     public function specificSale(Request $request)
@@ -60,4 +76,33 @@ class SalesService
         }
     }
 
+    public function insertProductsInSale(Request $request)
+    {
+        try{
+
+
+            if(!($sale = Sale::where('id', $request->id_sale)->first())){
+                throw new \Exception("Unable to find sale with id {$request->id_sale}. Try again!");
+            }
+
+            if(!($product = Product::where('id',$request->id_product)->first())){
+                throw new \Exception("Could not find product with id {$request->id_product}. Try a correct product!");
+            }
+
+
+            $amountSale = $sale->amount;
+
+            $amountSale += (double) $product->price;
+
+
+            if(!($sale->update(['amount' => $amountSale]))){
+                throw new \Exception("Unable to register {$product->name} when purchasing with id {$sale->id}.");
+            }
+
+            return response()->json(['success'=>['message' => 'Product inserted successfully!']],Response::HTTP_OK);
+
+        } catch (\Exception $e){
+            return response()->json(['error'=>['message' => $e->getMessage()]],Response::HTTP_NOT_FOUND);
+        }
+    }
 }
