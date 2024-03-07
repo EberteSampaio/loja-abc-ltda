@@ -92,7 +92,7 @@ class SalesService
 
             $amountSale = $sale->amount;
 
-            $amountSale += (double) $product->price;
+            $amountSale += ((double) $product->price * $request->qtd_product);
 
 
             if(!($sale->update(['amount' => $amountSale]))){
